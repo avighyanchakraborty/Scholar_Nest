@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Latest IT Jobs & Internships</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background:#0d1117; color:#e6edf3; margin:0; padding:0; }
+        header { background:#161b22; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.6); }
+        header h1 { margin:0; font-size:1.5rem; color:#58a6ff; }
+        .home-btn, .apply-btn {
+            background:linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border:none; border-radius:6px; padding:0.5rem 1rem;
+            color:white; font-weight:600; text-decoration:none;
+            transition:background 0.3s ease;
+        }
+        .home-btn:hover, .apply-btn:hover { background:linear-gradient(90deg,#3a7bd5,#00d2ff); }
+        main { max-width:1100px; margin:2rem auto; padding:0 1rem; }
+        h2 { margin:2rem 0 1rem; color:#00d2ff; font-size:1.5rem; border-bottom:2px solid #00d2ff; padding-bottom:0.5rem; }
+        .jobs-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem; }
+        .job-card { background:#161b22; border-radius:12px; padding:1.5rem; box-shadow:0 4px 12px rgba(0,0,0,0.4); transition:transform 0.2s ease, box-shadow 0.2s ease; }
+        .job-card:hover { transform:translateY(-5px); box-shadow:0 6px 16px rgba(0,0,0,0.6); }
+        .job-card h3 { margin:0 0 0.5rem; font-size:1.25rem; color:#58a6ff; }
+        .job-card p { margin:0.25rem 0; font-size:0.95rem; color:#c9d1d9; }
+        .no-jobs { text-align:center; color:#8b949e; margin-top:2rem; }
+        .apply-btn { margin-top:20px; display:inline-block; }
+
+        /* Form styling */
+        .search-form { text-align:center; margin-bottom:2rem; }
+        .search-form select, .search-form button {
+            padding:0.5rem 1rem; font-size:1rem; margin:0.5rem;
+            border-radius:6px; border:none;
+        }
+        .search-form button {
+            background:linear-gradient(90deg,#00d2ff,#3a7bd5);
+            color:white; font-weight:bold; cursor:pointer;
+        }
+        .search-form button:hover {
+            background:linear-gradient(90deg,#3a7bd5,#00d2ff);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>💼 Jobs & Internships</h1>
+    <a href="{{ url_for('home') }}" class="home-btn">🏠 Home</a>
+</header>
+
+<main>
+    <!-- Category Selection Form -->
+    <div class="search-form">
+        <form method="POST" action="{{ url_for('news') }}">
+            <label for="category">Choose Job Category:</label>
+            <select name="category" id="category">
+                <option value="Software Developer" {% if selected_category == 'Software Developer' %}selected{% endif %}>Software Developer</option>
+                <option value="AI ML Developer" {% if selected_category == 'AI ML Developer' %}selected{% endif %}>AI/ML Developer</option>
+                <option value="Data Scientist" {% if selected_category == 'Data Scientist' %}selected{% endif %}>Data Scientist</option>
+                <option value="Web Developer" {% if selected_category == 'Web Developer' %}selected{% endif %}>Web Developer</option>
+                <option value="Cloud Engineer" {% if selected_category == 'Cloud Engineer' %}selected{% endif %}>Cloud Engineer</option>
+            </select>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Jobs Section -->
+    <h2>💼 Latest {{ selected_category }} Jobs</h2>
+    {% if jobs %}
+    <div class="jobs-grid">
+        {% for job in jobs %}
+        <div class="job-card">
+            <h3>{{ job.title }}</h3>
+            <p><strong>Company:</strong> {{ job.company }}</p>
+            <p><strong>Location:</strong> {{ job.location }}</p>
+            <p><strong>Salary:</strong> {{ job.salary }}</p>
+            <a href="{{ job.link }}" target="_blank" class="apply-btn">Apply Now</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-jobs">🚫 No jobs found for {{ selected_category }}. Please try another category.</p>
+    {% endif %}
+
+    <!-- Internships Section -->
+    <h2>🎓 Internships</h2>
+    {% if internships %}
+    <div class="jobs-grid">
+        {% for job in internships %}
+        <div class="job-card">
+            <h3>{{ job.title }}</h3>
+            <p><strong>Company:</strong> {{ job.company }}</p>
+            <p><strong>Location:</strong> {{ job.location }}</p>
+            <p><strong>Stipend/Salary:</strong> {{ job.salary }}</p>
+            <a href="{{ job.link }}" target="_blank" class="apply-btn">Apply Now</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-jobs">🚫 No internships found for {{ selected_category }}.</p>
+    {% endif %}
+</main>
+
+</body>
+</html>

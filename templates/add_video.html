@@ -1,0 +1,11 @@
+<!-- add_video.html -->
+{% extends "base.html" %}
+{% block content %}
+<h2>Add YouTube Video by URL</h2>
+{% if message %}<p>{{ message }}</p>{% endif %}
+<form method="post">
+  <input name="video_url" placeholder="https://www.youtube.com/watch?v=..." required style="width:60%">
+  <input name="topic_key" placeholder="topic_key (e.g., Binary_tree)" />
+  <button type="submit">Add Video</button>
+</form>
+{% endblock %}

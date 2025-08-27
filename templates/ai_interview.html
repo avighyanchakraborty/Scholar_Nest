@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}AI Interview{% endblock %}
+{% block content %}
+<div class="card shadow-sm p-4">
+    <h2 class="mb-3">🤖 AI Interview Practice</h2>
+
+    {% if step == "start" %}
+    <form method="POST">
+        <div class="mb-3">
+            <label for="topic" class="form-label">Enter a topic:</label>
+            <input type="text" class="form-control" id="topic" name="topic" placeholder="Python Interview" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Start Interview</button>
+    </form>
+
+    {% elif step == "ask" %}
+    <div class="mb-3">
+        <span class="text-muted">Progress: {{ progress }}</span>
+    </div>
+    <h5>Question:</h5>
+    <div class="alert alert-secondary">{{ question }}</div>
+    <form method="POST">
+        <textarea class="form-control bg-dark text-light" name="user_answer" rows="3" required></textarea>
+        <button type="submit" class="btn btn-success w-100 mt-2">Submit Answer</button>
+    </form>
+
+    {% elif step == "feedback" %}
+    <div class="feedback-section mb-4 p-3 border rounded bg-dark text-light">
+        <h6>✅ Correct Answer:</h6>
+        <p>{{ answer.correct_answer }}</p>
+        <h6>💡 Feedback:</h6>
+        <p>{{ answer.feedback }}</p>
+        
+    </div>
+    <form method="POST">
+        <button type="submit" name="next" class="btn btn-primary w-100">Next Question</button>
+    </form>
+
+    {% elif step == "done" %}
+    <div class="alert alert-success">
+        <h5>✅ Interview Completed!</h5>
+        <p>Your final score: <strong>{{ score }} / {{ total }}</strong></p>
+    </div>
+    <a href="/ai_interview" class="btn btn-primary w-100">Start New Interview</a>
+    {% endif %}
+</div>
+{% endblock %}

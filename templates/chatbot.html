@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Doubt Solver{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #121212;
+        color: #f5f5f5;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    h2 {
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 25px;
+        background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .form-group label {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+        color: #cfcfcf;
+    }
+
+    .form-control {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    color: #f5f5f5 !important;   /* Force white text */
+    transition: all 0.3s ease-in-out;
+}
+
+.form-control::placeholder {
+    color: #888;   /* Lighter gray placeholder */
+    opacity: 1;    /* Ensures consistent rendering across browsers */
+}
+
+
+    .form-control:focus {
+        border-color: #00d2ff;
+        box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        background-color: #1e1e1e;
+    }
+
+    .btn-ask {
+        background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-ask:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 210, 255, 0.6);
+    }
+    
+
+    .answer-box {
+        background-color: #1e1e1e;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 25px;
+        border: 1px solid #333;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .similarity {
+        color: #aaa;
+        font-size: 0.9rem;
+        margin-top: 8px;
+    }
+</style>
+
+<div class="container mt-5">
+    <h2>Ask Your Doubt</h2>
+    <form method="POST" class="p-4 rounded" style="background-color: #181818;">
+        <div class="form-group mb-3">
+            <label for="question">Ask your question:</label>
+            <input type="text" class="form-control" id="question" name="question" placeholder="Enter your question here" required>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn-ask">🚀 Ask</button>
+        </div>
+    </form>
+
+    {% if answer %}
+        <div class="answer-box">
+            <h4 style="color: #00d2ff;">Answer:</h4>
+            <p>{{ answer }}</p>
+            {% if similarity %}
+                <p class="similarity"><strong>Similarity Score:</strong> {{ similarity | round(2) }}</p>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

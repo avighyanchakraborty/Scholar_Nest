@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Results</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        body {
+            background: #121212;
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding: 50px 20px;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #4dabf7;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .score {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ffde59;
+        }
+
+        .message {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .videos-link {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+
+        a {
+            background: #4dabf7;
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        a:hover {
+            background: #339af0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .home-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #4dabf7;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    z-index: 1000;
+    transition: background 0.3s;
+}
+
+.home-btn:hover {
+    background: #339af0;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Home button on top-left -->
+    <a href="/" class="home-btn">🏠 Home</a>
+
+    <h1>Quiz Results</h1>
+    <div class="score" id="score">0 / {{ total }}</div>
+    <div class="message" id="message"></div>
+
+    <div class="videos-link" id="videos"></div>
+
+    <script>
+        const scoreElem = document.getElementById('score');
+        const messageElem = document.getElementById('message');
+        const videosElem = document.getElementById('videos');
+
+        const finalScore = {{ score }};
+        const total = {{ total }};
+        const topicKey = "{{ topic_key }}";
+        let current = 0;
+
+        const interval = setInterval(() => {
+            if(current <= finalScore) {
+                scoreElem.textContent = current + " / " + total;
+                current++;
+            } else {
+                clearInterval(interval);
+
+                const percent = (finalScore / total) * 100;
+                let msg = "";
+                let color = "";
+
+                if(percent >= 90){
+                    msg = "🎉 Excellent! You nailed it!";
+                    color = "#4ef542"; // green
+                } else if(percent >= 70){
+                    msg = "👍 Good job! A little more practice will make it perfect.";
+                    color = "#4dabf7"; // blue
+                } else if(percent >= 50){
+                    msg = "🙂 Not bad, but focus on weak areas.";
+                    color = "#ffde59"; // yellow
+                } else {
+                    msg = "⚠️ Keep practicing! Review the topics carefully.";
+                    color = "#ff6b6b"; // red
+                }
+
+                messageElem.textContent = msg;
+                messageElem.style.color = color;
+
+                if(percent < 90){
+                    videosElem.innerHTML = `<p>📺 Watch related videos to improve:</p>
+                                            <a href="/videos/${topicKey}" target="_blank">▶️ Go to Videos</a>`;
+                }
+            }
+        }, 100);
+    </script>
+</body>
+</html>

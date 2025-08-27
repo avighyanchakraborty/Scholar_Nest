@@ -1,0 +1,102 @@
+<!-- ==================== QUIZ PAGE ==================== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz on {{ topic }}</title>
+<style>
+:root {
+  --primary: #2196f3;
+  --accent: #0d64d5ff;
+  --bg: #121212;
+  --card: #1f1f1f;
+  --text: #e0e0e0;
+}
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+}
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+}
+h2 {
+  text-align: center;
+  color: var(--accent);
+  margin-bottom: 15px;
+}
+p { text-align: center; color: #bbb; }
+label { font-weight: bold; margin-top: 15px; display: block; }
+.options label {
+  font-weight: normal;
+  margin: 6px 0;
+  padding: 8px;
+  border-radius: 6px;
+  background: #2a2a2a;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.options input { margin-right: 8px; }
+.options label:hover { background: #333; }
+button {
+  margin-top: 20px;
+  padding: 14px;
+  width: 100%;
+  background: linear-gradient(45deg, var(--primary), #64b5f6);
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(33,150,243,0.4);
+}
+.top-bar {
+  text-align: right;
+  margin-bottom: 15px;
+}
+.top-bar a {
+  background: var(--accent);
+  color: #121212;
+  padding: 8px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="top-bar">
+    <a href="{{ url_for('home') }}">🏠 Home</a>
+  </div>
+  <h2>Quiz on {{ topic }}</h2>
+  <p>Timeline: {{ time }}</p>
+  <form method="POST" action="{{ url_for('roadmap_mcq') }}">
+    {% for mcq in mcqs %}
+      <label>{{ loop.index }}. {{ mcq.question }}</label>
+      <div class="options">
+        {% set outer_idx = loop.index0 %}
+        {% for option in mcq.options %}
+          <label>
+            <input type="radio" name="q{{ outer_idx }}" value="{{ loop.index0 }}" required>
+            {{ option }}
+          </label>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    <button type="submit">✅ Submit Quiz</button>
+  </form>
+</div>
+</body>
+</html>

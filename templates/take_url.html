@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enter YouTube URL</title>
+<style>
+    body { font-family: Arial; background: #f0f2f5; text-align: center; padding-top: 50px;}
+    input { padding: 10px; width: 50%; margin: 10px 0; }
+    button { padding: 10px 20px; cursor: pointer; }
+</style>
+</head>
+<body>
+    <h1>Enter YouTube Video URL</h1>
+    <input type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+    <br>
+    <button onclick="goToSummary()">Analyze Video</button>
+
+    <script>
+        function goToSummary() {
+            const url = document.getElementById('videoUrl').value.trim();
+            if(!url) { alert("Enter a valid YouTube URL"); return; }
+            // Redirect to summary page with video URL as query param
+            window.location.href = `/summary?video_url=${encodeURIComponent(url)}`;
+        }
+    </script>
+</body>
+</html>

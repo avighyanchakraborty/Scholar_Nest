@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Transcript Analyzer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #121212, #1a1a2e);
+      color: #f1f1f1;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(15, 15, 30, 0.9);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(15px);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #2196f3, #0d47a1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .header p {
+      color: #aaa;
+      font-size: 1.1rem;
+    }
+
+    .input-section {
+      background: rgba(20, 20, 40, 0.6);
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+      border: 2px solid rgba(255, 255, 255, 0.05);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #ddd;
+    }
+
+    .url-input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .url-input:focus {
+      outline: none;
+      border-color: #2196f3;
+      box-shadow: 0 0 10px rgba(33, 150, 243, 0.6);
+    }
+
+    .analyze-btn {
+      background: linear-gradient(135deg, #2196f3, #0d47a1);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .analyze-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(33, 150, 243, 0.5);
+    }
+
+    .analyze-btn:disabled {
+      background: #444;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .spinner {
+      border: 4px solid #333;
+      border-top: 4px solid #2196f3;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .results {
+      display: none;
+      margin-top: 30px;
+    }
+
+    .result-card {
+      background: rgba(20, 20, 40, 0.9);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      border-left: 5px solid #2196f3;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .result-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .result-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      color: #fff;
+    }
+
+    .result-title::before {
+      content: "🔹";
+      margin-right: 10px;
+      color: #2196f3;
+    }
+
+    .result-content {
+      color: #ccc;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .error {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid #ff4c4c;
+      border-radius: 10px;
+      padding: 15px;
+      color: #ff6b6b;
+      margin: 20px 0;
+      display: none;
+    }
+
+    .success {
+      background: rgba(0, 255, 100, 0.1);
+      border: 1px solid #4cff7f;
+      border-radius: 10px;
+      padding: 15px;
+      color: #4cff7f;
+      margin: 20px 0;
+      display: none;
+    }
+
+    .stats {
+      background: linear-gradient(135deg, #2196f3, #0d47a1);
+      color: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .stats h3 {
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+        margin: 10px;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .input-section {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎥 YouTube Transcript Analyzer</h1>
+      <p>Analyze YouTube videos using AI-powered text analysis</p>
+    </div>
+
+    <div class="input-section">
+      <label for="videoUrl">YouTube Video URL</label>
+      <input type="url" id="videoUrl" class="url-input"
+             placeholder="https://www.youtube.com/watch?v=..." required>
+      <button onclick="analyzeVideo()" class="analyze-btn" id="analyzeBtn">
+        🔍 Analyze Video
+      </button>
+    </div>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Analyzing video transcript... Please wait</p>
+    </div>
+
+    <div class="error" id="error"></div>
+    <div class="success" id="success"></div>
+
+    <div class="results" id="results">
+      <div class="stats" id="stats"></div>
+      <div id="resultsContent"></div>
+    </div>
+  </div>
+
+  <script>
+    async function analyzeVideo() {
+      const videoUrl = document.getElementById('videoUrl').value.trim();
+      const analyzeBtn = document.getElementById('analyzeBtn');
+      const loading = document.getElementById('loading');
+      const results = document.getElementById('results');
+      const error = document.getElementById('error');
+      const success = document.getElementById('success');
+
+      hideElements([results, error, success]);
+
+      if (!videoUrl) {
+        showError('Please enter a YouTube URL');
+        return;
+      }
+
+      if (!isValidYouTubeUrl(videoUrl)) {
+        showError('Invalid YouTube URL');
+        return;
+      }
+
+      analyzeBtn.disabled = true;
+      analyzeBtn.textContent = '🔄 Analyzing...';
+      loading.style.display = 'block';
+
+      try {
+        const response = await fetch('/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ video_url: videoUrl })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          displayResults(data);
+          showSuccess('✅ Analysis completed successfully!');
+        } else {
+          showError(data.error || 'An error occurred during analysis');
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        showError('Failed to connect to the server. Please try again.');
+      } finally {
+        analyzeBtn.disabled = false;
+        analyzeBtn.textContent = '🔍 Analyze Video';
+        loading.style.display = 'none';
+      }
+    }
+
+    function displayResults(data) {
+      const results = document.getElementById('results');
+      const statsDiv = document.getElementById('stats');
+      const resultsContent = document.getElementById('resultsContent');
+
+      statsDiv.innerHTML = `
+        <h3>Analysis Complete</h3>
+        <p>Transcript Length: ${data.transcript_length} characters</p>
+        <p>Video URL: <a href="${data.video_url}" target="_blank" style="color: #fff; text-decoration: underline;">Open Video</a></p>
+      `;
+
+      resultsContent.innerHTML = '';
+
+      const resultTypes = {
+        'bullet_point_summary': '📝 Bullet Point Summary',
+        'paragraph_summary': '📄 Paragraph Summary',
+        'key_topics': '🎯 Key Topics',
+        'exact_meaning_analysis': '🔍 Exact Meaning Analysis',
+        'context_purpose_analysis': '📋 Context & Purpose Analysis',
+        'speaker_intentions': '💭 Speaker Intentions Analysis',
+        'numbered_summary': '🔹 Custom Numbered Summary'
+      };
+
+      for (const [key, title] of Object.entries(resultTypes)) {
+        if (data.results[key]) {
+          const resultCard = document.createElement('div');
+          resultCard.className = 'result-card';
+          resultCard.innerHTML = `
+            <div class="result-title">${title}</div>
+            <div class="result-content">${formatResult(data.results[key])}</div>
+          `;
+          resultsContent.appendChild(resultCard);
+        }
+      }
+
+      results.style.display = 'block';
+    }
+
+    function formatResult(content) {
+      if (typeof content === 'string') {
+        return content.replace(/\n/g, '<br>');
+      }
+      return JSON.stringify(content, null, 2);
+    }
+
+    function isValidYouTubeUrl(url) {
+      const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]+/;
+      return youtubeRegex.test(url);
+    }
+
+    function showError(message) {
+      const errorDiv = document.getElementById('error');
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+    }
+
+    function showSuccess(message) {
+      const successDiv = document.getElementById('success');
+      successDiv.textContent = message;
+      successDiv.style.display = 'block';
+    }
+
+    function hideElements(elements) {
+      elements.forEach(el => el.style.display = 'none');
+    }
+
+    document.getElementById('videoUrl').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        analyzeVideo();
+      }
+    });
+  </script>
+</body>
+</html>

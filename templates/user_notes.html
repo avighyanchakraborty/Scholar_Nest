@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Notes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        a.home-btn {
+            display: inline-block;
+            margin: 20px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ff9800, #ffb74d);
+            color: #121212;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        a.home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 152, 0, 0.5);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff9800;
+            margin-bottom: 30px;
+        }
+
+        /* Form */
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 30px;
+        }
+
+        textarea {
+            background: #2a2a2a;
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 15px;
+            color: #fff;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #ff9800;
+            box-shadow: 0 0 10px #ff9800;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ff9800, #ffb74d);
+            color: #121212;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            align-self: flex-start;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 152, 0, 0.5);
+        }
+
+        /* Notes grid */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .note-tile {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            word-wrap: break-word;
+        }
+
+        .note-tile:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 152, 0, 0.3);
+        }
+
+        .note-text {
+            white-space: pre-wrap;
+            color: #fff;
+        }
+
+        .info {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('home') }}" class="home-btn">🏠 Home</a>
+        <h1>Your Notes</h1>
+
+        <form method="POST">
+            <textarea name="note" placeholder="Write a new note..."></textarea>
+            <button type="submit">Add Note</button>
+        </form>
+
+        {% if notes %}
+        <div class="notes-grid">
+            {% for n in notes %}
+            <div class="note-tile">
+                <div class="note-text">{{ n.note }}</div>
+                <div class="info">Updated: {{ n.updated_at }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="info">No notes yet. Add your first note!</div>
+        {% endif %}
+    </div>
+</body>
+</html>

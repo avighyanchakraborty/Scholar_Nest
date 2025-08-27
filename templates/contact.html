@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0a0a0a, #121212, #1c1c1c);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #e0e0e0;
+        }
+
+        /* Navbar */
+        header {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.7);
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        nav ul li {
+            margin-right: 20px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            color: #64b5f6;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: background 0.3s, color 0.3s;
+        }
+        nav ul li a:hover {
+            background: rgba(100, 181, 246, 0.1);
+            color: #2196f3;
+        }
+        .active {
+            background: rgba(100, 181, 246, 0.2);
+            color: #42a5f5;
+        }
+
+        /* Contact Card */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+        .contact-card {
+            background: rgba(20, 20, 30, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+            max-width: 450px;
+            width: 100%;
+            animation: fadeInUp 0.8s ease;
+        }
+        .contact-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 26px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #2196f3, #64b5f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .contact-card input,
+        .contact-card textarea {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            outline: none;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+        .contact-card input:focus,
+        .contact-card textarea:focus {
+            border: 1px solid #2196f3;
+            box-shadow: 0 0 10px rgba(33,150,243,0.5);
+        }
+        .contact-card textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .contact-card button {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #2196f3, #64b5f6);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+        .contact-card button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(100,181,246,0.4);
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Status Message */
+        #form-status {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            color: #64b5f6;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <ul>
+            <li><a href="/">🏠 Home</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div class="contact-card">
+        <h2>Contact Us</h2>
+        <form id="contact-form" action="https://formspree.io/f/mkgzeaob" method="POST">
+            <input type="text" name="name" placeholder="Enter your name" required>
+            <input type="email" name="email" placeholder="Enter your email address" required>
+            <textarea name="remarks" placeholder="Enter your message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <p id="form-status"></p>
+    </div>
+</main>
+
+<script>
+document.getElementById("contact-form").addEventListener("submit", async function(event) {
+    event.preventDefault(); // prevent direct redirect
+
+    const form = event.target;
+    const data = new FormData(form);
+    const status = document.getElementById("form-status");
+
+    try {
+        const response = await fetch(form.action, {
+            method: form.method,
+            body: data,
+            headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+            status.innerHTML = "✅ Message sent successfully! We’ll get back to you soon.";
+            status.style.color = "#42a5f5";
+            form.reset();
+        } else {
+            status.innerHTML = "⚠️ Oops! Something went wrong. Please try again.";
+            status.style.color = "#ff5252";
+        }
+    } catch (error) {
+        status.innerHTML = "⚠️ Network error. Please try later.";
+        status.style.color = "#ff5252";
+    }
+});
+</script>
+
+</body>
+</html>

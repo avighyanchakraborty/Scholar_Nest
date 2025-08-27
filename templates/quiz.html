@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ topic_name }} - Quiz</title>
+    <style>
+        body { background: #121212; color: #e0e0e0; font-family: Arial, sans-serif; }
+        .quiz-box { background: #1e1e1e; padding: 20px; border-radius: 8px; max-width: 800px; margin: auto; }
+        .question { margin-bottom: 15px; padding: 10px; border-radius: 5px; }
+        button { background: #4dabf7; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #339af0; }
+    </style>
+</head>
+<body>
+<div class="quiz-box">
+    <h1>{{ topic_name }} Quiz</h1>
+    <form method="POST">
+        {% for q in questions %}
+            {% set q_index = loop.index0 %}
+            <div class="question">
+                <p><b>Q{{ loop.index }}: {{ q.question }}</b></p>
+
+                {% for key, value in q.options.items() %}
+                    <label>
+                        <input type="radio" 
+                               name="q{{ q_index }}" 
+                               value="{{ key }}" 
+                               required>
+                        {{ key }}) {{ value }}
+                    </label><br>
+                {% endfor %}
+
+                <input type="hidden" name="correct{{ q_index }}" value="{{ q.correct }}">
+                <input type="hidden" name="question{{ q_index }}" value="{{ q.question }}">
+            </div>
+            <hr>
+        {% endfor %}
+
+        <input type="hidden" name="total" value="{{ questions|length }}">
+        <button type="submit">Finish Quiz</button>
+    </form>
+</div>
+</body>
+</html>

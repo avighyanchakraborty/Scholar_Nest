@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Analyze Image - Study Hub</title>
+  <style>
+    /* ---------- Base Styles ---------- */
+    body {
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      background: #0b0f16;
+      color: #e5e7eb;
+      margin: 20px;
+      line-height: 1.7;
+    }
+
+    * {
+      transition: all 0.3s ease;
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      margin-bottom: 25px;
+    }
+    header a {
+      display: inline-block;
+      color: #60a5fa;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(96, 165, 250, 0.1);
+    }
+    header a:hover {
+      color: #93c5fd;
+      background: rgba(96, 165, 250, 0.15);
+      transform: translateX(-4px);
+    }
+
+    /* ---------- Headings ---------- */
+    h2 {
+      color: #dbeafe;
+      font-size: 1.8rem;
+      margin-top: 20px;
+      margin-bottom: 15px;
+    }
+    h3 {
+      margin-top: 35px;
+      color: #dbeafe;
+      font-size: 1.6rem;
+    }
+
+    /* ---------- Form ---------- */
+    form {
+      margin: 25px auto;
+      background: linear-gradient(145deg, #111827, #1e293b);
+      padding: 20px;
+      border-radius: 14px;
+      width: 60%;
+      max-width: 480px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.4);
+    }
+    form:hover {
+      background: linear-gradient(145deg, #1f2937, #111827);
+      box-shadow: 0 5px 16px rgba(0,0,0,0.6);
+    }
+    input[type="file"] {
+      margin: 12px 0;
+      padding: 10px;
+      border: none;
+      width: 100%;
+      border-radius: 10px;
+      background: #1f2937;
+      color: #d1d5db;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    input[type="file"]:hover {
+      background: #374151;
+    }
+    button {
+      margin-top: 10px;
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
+    }
+    button:hover {
+      background: linear-gradient(90deg, #1d4ed8, #2563eb);
+      transform: scale(1.05);
+      box-shadow: 0 5px 14px rgba(37, 99, 235, 0.5);
+    }
+
+    /* ---------- Analysis Box ---------- */
+    .analysis-box {
+      margin: 30px auto;
+      background: linear-gradient(145deg, #111827, #1f2937);
+      padding: 25px;
+      border-radius: 14px;
+      width: 75%;
+      text-align: left;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.5);
+      font-size: 15px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .analysis-box:hover {
+      background: linear-gradient(145deg, #1f2937, #111827);
+      box-shadow: 0 5px 16px rgba(0,0,0,0.7);
+    }
+
+    /* ---------- Stylish Subtopics ---------- */
+    .analysis-box b {
+      display: block;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      color: #facc15;
+      font-size: 1.2rem; /* Bigger font */
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-left: 4px solid #facc15;
+      padding-left: 10px;
+      text-shadow: 0 0 6px rgba(250, 204, 21, 0.6);
+    }
+
+    /* Values */
+    .analysis-box span {
+      display: block;
+      margin-left: 12px;
+      color: #e5e7eb;
+      font-size: 15px;
+    }
+
+    /* Bullet list */
+    .analysis-box li {
+      margin: 5px 0 5px 25px;
+      color: #d1d5db;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a href="/">⬅ Home</a>
+  </header>
+
+  <!-- Upload Section -->
+  <h2>📷 Upload Study Material for Analysis</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*" required>
+    <button type="submit">Analyze</button>
+  </form>
+
+  <!-- Analysis Section -->
+  {% if result %}
+    <h3>🔍 Analysis Result:</h3>
+    <div class="analysis-box">
+      {{ result
+   | replace("{","") 
+   | replace("}","") 
+   | replace("[","• ") 
+   | replace("]","") 
+   | replace("\"","") 
+   | replace(",", "\n")
+   
+   | replace("description:", "<b>Description</b><span>")
+   | replace("problem:", "<b>Problem</b><span>")
+   | replace("problem_description:", "<b>Problem Description</b><span>")
+   | replace("example:", "<b>Example</b><span>")
+   | replace("code_snippet:", "<b>Code Snippet</b><span>")
+   | replace("potential_questions:", "<b>Potential Questions</b><span>")
+   | replace("possible_questions:", "<b>Possible Questions</b><span>")  
+   | replace("concepts:", "<b>Concepts</b><span>") 
+    | replace("video_chapters: :", "<b>Video_chapters: </b><span>")  
+   | replace("course_context:", "<b>Course Context</b><span>")
+   | replace("course_name:", "<b>Course Name</b><span>")
+   | replace("progress:", "<b>Progress</b><span>")
+   | replace("week:", "<b>Week</b><span>")
+   | replace("assignments:", "<b>Assignments</b><span>")
+   | replace("suggestions:", "<b>Suggestions</b><span>")
+    | replace(" additional_notes:", "<b> Additional_Notes:</b><span>")
+   | replace("\n", "</span>\n")
+   | safe
+}}
+
+    </div>
+  {% endif %}
+
+</body>
+</html>

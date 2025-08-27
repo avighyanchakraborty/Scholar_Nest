@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        
+        /* Global Dark Theme */
+        body {
+            background-color: #121212;
+            color: #f5f5f5ff;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        a {
+            color: #00d2ff;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #3a7bd5;
+        }
+
+        /* Navbar */
+        .navbar-dark {
+            background: #1c1c1c !important;
+        }
+
+        /* Hero Section */
+.hero {
+    width: 70%; /* half the screen width */
+    min-height: 450px; /* banner height */
+    background: url("static/ChatGPT Image Aug 21, 2025, 09_49_45 PM.png")
+                no-repeat center center;
+    background-size: 100% 100%; /* stretch image fully */
+    background-color: #000;
+    color: white;
+
+    margin: 0 auto;             /* centers the whole hero block */
+    display: flex;              /* enable flexbox */
+    justify-content: center;    /* center horizontally */
+    align-items: center;        /* center vertically */
+    text-align: center;
+
+    animation: fadeIn 1.2s ease-in-out;
+    border-bottom: 1px solid #00d2ff;
+}
+
+
+.hero p {
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #d1d1d1;
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero .btn {
+    padding: 12px 28px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.hero .btn:hover {
+    background: linear-gradient(90deg, #3a7bd5, #00d2ff);
+    transform: translateY(-3px);
+    box-shadow: 0px 5px 20px rgba(0, 210, 255, 0.4);
+}
+
+        .btn-gradient {
+            background: linear-gradient(to right, #00d2ff, #3a7bd5);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-gradient:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,210,255,0.5);
+        }
+
+        /* Feature Cards */
+        .feature-card {
+            background: #1e1e1e;
+            border: none;
+            border-radius: 15px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            padding: 20px;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 8px 20px rgba(0,210,255,0.2);
+        }
+
+        /* Popular Domains */
+        .domain-card {
+            background: #1e1e1e;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .domain-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 20px rgba(0,210,255,0.2);
+        }
+        .domain-card h5 {
+            color: #00d2ff;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: #1a1a1a;
+            padding: 50px 0;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Footer */
+        footer {
+            background: #0d0d0d;
+            color: #ccc;
+            padding: 20px 0;
+        }
+        footer a {
+            color: #aaa;
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: #fff;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        /* Ticker styles */
+        .ticker-container {
+            background: linear-gradient(90deg, #000000ff, #000000ff);
+            color: white;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 6px 0;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .card h5 {
+    color: #00d2ff;
+}
+.nav-item mx-2{
+    color: #ffffffff;
+}
+      .card h6 {
+    color: #f5f5f5;
+}
+.nav-link{
+    color: #db7a18ff ;
+}
+
+
+        .ticker-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: ticker 15s linear infinite;
+        }
+        .ticker-container:hover .ticker-text {
+            animation-play-state: paused;
+        }
+        @keyframes ticker {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid">
+   <a class="navbar-brand fw-bold me-4 d-flex align-items-center" href="#">
+  <img src="{{ url_for('static', filename='logo.jpg') }}" 
+       alt="Logo" width="200" height="70" class="me-2">
+  
+</a>
+
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item mx-3"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item mx-3"><a class="nav-link" href="/leaderboard">LeaderBoard</a></li>
+                 
+                <li class="nav-item mx-3"><a class="nav-link" href="/buy_notes">Buy Handwritten Notes </a></li>
+                <li class="nav-item mx-3"><a class="nav-link" href="/analyze_image">Analysis Image</a></li>
+                <li class="nav-item mx-3"><a class="nav-link" href="/contact">Contact Us</a></li>
+                <li class="nav-item dropdown mx-3">
+                    <a class="nav-link dropdown-toggle px-3" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown">
+                        Profile
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {% if g.user %}
+                           <li class="dropdown-item text-muted">
+                                ⭐ Points: {{ xp }}
+                            </li>
+                             <li class="dropdown-item">
+        <a href="{{ url_for('user_notes') }}" class="text-decoration-none text-dark">
+            📒 My Notes
+        </a>
+    </li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                        {% else %}
+                            <li><a class="dropdown-item" href="{{ url_for('login') }}">Login</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('register') }}">Sign Up</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+
+<div class="ticker-container">
+    <div class="ticker-text">
+       🚀 Welcome to ScholarNest – Your Gateway to Smart Learning! 📚 | Access Notes 📝 | Watch Video Lectures 🎥 | Practice Quizzes 🧩 | Track Progress 📊 | Explore AI Study Tools 🤖 | Get Personalized Recommendations 🎯 | Learn Smarter Every Day! 🌟
+
+    </div>
+</div>
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+   
+    
+  </div>
+</section>
+
+
+
+<!-- Feature Cards -->
+<div class="container text-center py-5">
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="feature-card">
+                📄 <h5 class="mt-3">Access Notes</h5>
+                <p>Read from curated notes for your chosen domain.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-card">
+                ▶ <h5 class="mt-3">Watch Lectures</h5>
+                <p>Access curated video lectures for your chosen domain.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-card">
+                📝 <h5 class="mt-3">Take Quizzes</h5>
+                <p>Test your knowledge instantly with topic-based quizzes.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-card">
+                📊 <h5 class="mt-3">Track Progress</h5>
+                <p>Monitor your learning journey and achievements.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Popular Domains -->
+<div class="container my-5">
+    <h3 class="text-center mb-4">Popular Domains</h3>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="domain-card p-4">
+                <h5>Computer Science Engineering (CSE)</h5>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="domain-card p-4">
+                <h5>Electronics and Communication Engineering (ECE)</h5>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="domain-card p-4">
+                <h5>Placement Preparation (DSA)</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Domain Selector -->
+<div class="card mx-auto mb-5" style="max-width: 400px; background:#1e1e1e; border:none;">
+    <div class="card-body">
+        <h5 class="card-title text-center mb-4 "style="color: blue">Choose Your Domain</h5>
+        <form method="post" action="{{ url_for('index') }}">
+            <select name="domain" class="form-select mb-3" onchange="this.form.submit()">
+                <option value="" disabled selected>Select Domain</option>
+                {% for domain in ['CSE', 'ECE', 'DSA'] %}
+                    <option value="{{ domain }}" {% if selected_domain == domain %}selected{% endif %}>{{ domain }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+</div>
+
+{% if selected_domain %}
+<!-- List Topics for Selected Domain -->
+<div class="card mx-auto mb-4" style="max-width: 800px; background:#1e1e1e; border:none;">
+    <div class="card-body">
+        <h5 class="card-title">Topics in {{ selected_domain }}</h5>
+        <ul class="list-group list-group-flush">
+            {% for topic_name, subs in all_data[selected_domain].items() %}
+                {% for sub_name, sub_info in subs.items() %}
+                    <li class="list-group-item bg-dark text-light d-flex justify-content-between align-items-center">
+                        {{ sub_name }}
+                        <a href="{{ url_for('notes', topic_key=sub_info.topic_key) }}" class="btn btn-sm btn-gradient">View Notes</a>
+                    </li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+<!-- Roadmap + Chatbot Section -->
+<div class="container my-5">
+    <div class="row g-4 justify-content-center">
+        <!-- Roadmaps -->
+        <div class="col-md-6">
+            <div class="card h-100" style="background:#1e1e1e; border:none;">
+                <div class="card-body text-center">
+                    <h5 class="card-title" style="color: #00d2ff;">📍 Roadmaps</h5>
+                    <p class="text-light">Follow structured learning paths to master your domain step by step.</p>
+                    <a href="/roadmap" class="btn btn-gradient">Explore Roadmaps</a>
+                </div>
+            </div>
+        </div>
+        <!-- Chatbot -->
+        <div class="col-md-6">
+            <div class="card h-100" style="background:#1e1e1e; border:none;">
+                <div class="card-body text-center">
+                    <h5 class="mt-3">🤖 Smart AI Chatbot</h5>
+                    <h6>Ask questions, get instant answers, and enhance your learning with our AI-powered chatbot.</h6>
+                    <a href="{{ url_for('chatbot') }}" class="btn btn-gradient">Open Chatbot</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- News/Jobs + AI Interview Section -->
+<div class="container mb-5">
+  <div class="row justify-content-center">
+    
+    <!-- Latest Job Openings -->
+    <div class="col-md-6">
+      <div class="card" style="background:#1e1e1e; border:none;">
+        <div class="card-body text-center">
+          <h5 class="card-title" style="color: #00d2ff;">💼 Latest Job Openings And Internship Opportunities</h5>
+          <p class="text-light">Stay updated with the most recent opportunities tailored to your skills and interests.</p>
+          <a href="/news" class="btn btn-gradient">View Jobs</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Interview -->
+    <div class="col-md-6">
+      <div class="card" style="background:#1e1e1e; border:none;">
+        <div class="card-body text-center">
+          <h5 class="card-title" style="color: #00d2ff;">🤖 AI Interview</h5>
+          <p class="text-light">Practice your interview skills with AI-driven mock interviews and feedback.</p>
+          <a href="/ai_interview" class="btn btn-gradient">AI INTERVIEW</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Stats Section -->
+<section class="stats text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stat-number">100+</div>
+                Notes Uploaded
+            </div>
+            <div class="col-md-4">
+                <div class="stat-number">500+</div>
+                Videos
+            </div>
+            <div class="col-md-4">
+                <div class="stat-number">300+</div>
+                Questions
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center">
+    <div class="container">
+        <p>&copy; 2025 Study Hub | <a href="#">Contact</a> | <a href="#">About</a> | <a href="#">Terms</a></p>
+        <div>
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-twitter"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

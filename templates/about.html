@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Study Hub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+      body { 
+          background: #121212; 
+          color: #f5f5f5; 
+          font-family: 'Segoe UI', sans-serif; 
+          line-height: 1.6;
+      }
+      .about-container { 
+          max-width: 900px; 
+          margin: 50px auto; 
+          padding: 40px; 
+          background: #1e1e1e; 
+          border-radius: 12px; 
+          box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      }
+      h1 { 
+          color: #00d2ff; 
+          font-weight: 600; 
+          margin-bottom: 20px;
+      }
+      h3 { 
+          color: #00d2ff; 
+          margin-top: 25px; 
+          font-size: 1.25rem;
+      }
+      p.lead {
+          font-size: 1.1rem;
+          color: #cccccc;
+      }
+      ul li {
+          margin-bottom: 10px;
+      }
+      a { 
+          color: #00d2ff; 
+          text-decoration: none; 
+      }
+      a:hover { 
+          text-decoration: underline; 
+      }
+      .back-link {
+          display: inline-block;
+          margin-top: 30px;
+          padding: 10px 18px;
+          border-radius: 8px;
+          background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+          color: #fff !important;
+          font-weight: 500;
+          transition: 0.3s;
+      }
+      .back-link:hover {
+          background: linear-gradient(45deg, #3a7bd5, #00d2ff);
+      }
+  </style>
+</head>
+<body>
+  <div class="about-container">
+      <h1>ℹ About Study Hub</h1>
+      <p class="lead">Study Hub is your personalized learning companion — designed to make studying <strong>smarter, interactive, and more effective</strong> with the power of technology and community.</p>
+
+      <h3>✨ Our Mission</h3>
+      <p>We strive to empower students by providing easy access to high-quality learning materials, AI-driven tools, and collaborative opportunities that simplify complex concepts and boost exam preparation.</p>
+
+      <h3>📚 What We Offer</h3>
+      <ul>
+          <li>📝 <strong>Curated Notes & Handwritten Resources</strong> for quick revision</li>
+          <li>🎥 <strong>Video Lectures</strong> to understand concepts visually</li>
+          <li>🧩 <strong>Interactive Quizzes</strong> to test and strengthen knowledge</li>
+          <li>🤖 <strong>AI Chatbot Assistance</strong> for doubt-solving and guidance</li>
+          <li>🚀 <strong>Placement Preparation Roadmaps</strong> to ace your career journey</li>
+      </ul>
+
+      <h3>🌍 Our Vision</h3>
+      <p>We envision building a global learning community where students can <strong>learn, share, and grow together</strong> using modern tools that foster collaboration, confidence, and success.</p>
+
+      <a href="{{ url_for('home') }}" class="back-link">← Back to Home</a>
+  </div>
+</body>
+</html>

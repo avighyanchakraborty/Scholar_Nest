@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Buy Handwritten Notes</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a, #121212, #1c1c1c);
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        header {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(0,0,0,0.85);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+        }
+
+        header a.home-btn {
+            text-decoration: none;
+            color: #64b5f6;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        header a.home-btn:hover {
+            background: rgba(100,181,246,0.1);
+            color: #2196f3;
+        }
+
+        h2 {
+            margin-top: 40px;
+            font-size: 28px;
+            letter-spacing: 1px;
+            color: #90caf9;
+            text-align: center;
+            text-shadow: 0 0 12px rgba(144,202,249,0.4);
+        }
+
+        /* Balance styling */
+        p.balance {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .enough {
+            color: #42a5f5; /* bright blue for enough */
+            text-shadow: 0 0 10px rgba(66, 165, 245, 0.6);
+        }
+        .not-enough {
+            color: #ff5252; /* red */
+            text-shadow: 0 0 10px rgba(255, 82, 82, 0.6);
+        }
+
+        form {
+            background: rgba(20, 20, 30, 0.95);
+            padding: 30px;
+            margin: 40px auto;
+            width: 360px;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+        }
+
+        label {
+            color: #64b5f6;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #2c2c2c;
+            color: #fff;
+            margin: 12px 0 20px;
+            font-size: 15px;
+            cursor: pointer;
+            outline: none;
+            transition: box-shadow 0.3s, transform 0.2s;
+        }
+
+        select:hover {
+            box-shadow: 0 0 10px rgba(100,181,246,0.4);
+            transform: scale(1.02);
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(45deg, #2196f3, #64b5f6);
+            color: #0a0a0a;
+            font-weight: bold;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(100,181,246,0.5);
+        }
+
+        p.confirmation {
+            font-size: 18px;
+            margin: 20px;
+            text-align: center;
+            text-shadow: 0 0 6px rgba(66,165,245,0.4);
+        }
+
+        .success {
+            color: #42a5f5; /* blue success */
+        }
+
+        .error {
+            color: #ff5252;
+        }
+
+        a {
+            color: #64b5f6;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="home-btn">🏠 Home</a>
+</header>
+
+<h2>Buy Handwritten Notes</h2>
+
+<!-- Balance with conditional styling -->
+<p class="balance {% if points >= 1000 %}enough{% else %}not-enough{% endif %}">
+    Your Balance: {{ points }} points
+</p>
+
+{% if confirmation %}
+    <p class="confirmation {% if 'success' in confirmation|lower %}success{% else %}error{% endif %}">
+        {{ confirmation }}
+    </p>
+    <p style="text-align:center;"><a href="/">Go back to Home</a></p>
+{% else %}
+    <form method="POST">
+    <label>Choose Notes:</label><br><br>
+    <select name="domain" required>
+        <option value="cse_gate">Computer Science and Engineering GATE</option>
+        <option value="ece_gate">Electronics and Communication GATE</option>
+        <option value="dsa_preparation">Placement Preparation</option>
+    </select>
+
+    <label>Your Email:</label><br><br>
+    <input type="email" name="email" required 
+           placeholder="Enter your Google account email" 
+           style="width:100%;padding:10px;border-radius:8px;margin-bottom:20px;">
+
+    <button type="submit">Buy Now (1000 points)</button>
+</form>
+
+{% endif %}
+
+</body>
+</html>

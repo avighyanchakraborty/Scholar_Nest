@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ selected_domain }} Deep Dive</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0;
+            background: radial-gradient(circle at top left, #0a0a0a, #121212, #1c1c1c);
+            color: #e0e0e0;
+            padding: 20px;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: rgba(15, 15, 15, 0.7);
+            border-radius: 12px;
+            padding: 14px 28px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+        .navbar-brand {
+            font-size: 1.7em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-links a {
+            color: #ccc;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #00d2ff;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: rgba(30,30,30,0.95);
+            min-width: 160px;
+            border-radius: 8px;
+            backdrop-filter: blur(8px);
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.8);
+        }
+        .dropdown-content a {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .dropdown-content a:hover {
+            background: #2a2a2a;
+            color: #00d2ff;
+        }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        /* Headings */
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        h2 {
+            padding: 14px;
+            margin: 0;
+            background: #161616;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.15em;
+            transition: all 0.3s;
+        }
+        h2:hover {
+            background: #1e1e1e;
+            color: #00d2ff;
+        }
+
+        /* Topic Cards */
+        .topic {
+            border: 1px solid #2a2a2a;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        .topic:hover {
+            transform: scale(1.01);
+        }
+        .subtopics {
+            display: none;
+            padding: 15px;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        /* Table Styling */
+        .table-wrapper { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background: #1f1f1f;
+            color: #00d2ff;
+            font-size: 1em;
+        }
+        td {
+            background: #141414;
+        }
+        tr:nth-child(even) td {
+            background: #191919;
+        }
+
+        /* Action Buttons */
+        td.actions a {
+            display: inline-block;
+            font-size: 18px;
+            color: #fff;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        td.actions a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,210,255,0.4);
+        }
+
+        /* Progress Badges */
+        td.progress {
+            font-weight: 600;
+        }
+        .done {
+            background: #1b5e20;
+            color: #4caf50;
+            border-radius: 20px;
+            padding: 4px 10px;
+        }
+        .pending {
+            background: #2a2a2a;
+            color: #888;
+            border-radius: 20px;
+            padding: 4px 10px;
+        }
+
+        /* Ticker */
+        .ticker-container {
+            background: #0d0d0d;
+            color: #00d2ff;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 8px 0;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 10px rgba(0,210,255,0.25);
+        }
+        .ticker-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: ticker 15s linear infinite;
+        }
+        .ticker-container:hover .ticker-text { animation-play-state: paused; }
+        @keyframes ticker {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(-10px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <a class="navbar-brand" href="{{ url_for('home') }}">Study Hub</a>
+    <div class="nav-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('chatbot') }}">Chatbot</a>
+        <div class="dropdown">
+            <a href="#">Profile ▼</a>
+            <div class="dropdown-content">
+                {% if g.user %}
+                    <a href="{{ url_for('logout') }}">🚪 Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">🔑 Login</a>
+                    <a href="{{ url_for('register') }}">📝 Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- News Ticker -->
+<div class="ticker-container">
+    <div class="ticker-text">
+        🚀 Welcome to Study Hub – Your Gateway to Smart Learning! 📚 | Access Notes | Watch Video Lectures | Take Quizzes | Track Progress | Learn Smarter Every Day!
+    </div>
+</div>
+
+<h1>{{ selected_domain }} Topics</h1>
+
+
+{% for topic, subs in data.items() %}
+    {% set topic_index = loop.index %}
+    <div class="topic" id="topic-{{ topic_index }}">
+        <h2 onclick="toggleSection('{{ topic_index }}')">{{ topic }}</h2>
+        <div id="section-{{ topic_index }}" class="subtopics">
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <th>Subtopic</th>
+                        <th>Notes</th>
+                        <th>Videos</th>
+                        <th>Quiz</th>
+                        <th>Progress</th>
+                    </tr>
+                    {% for sub_name, details in subs.items() %}
+                    <tr>
+                        <td>{{ sub_name }}</td>
+                        <td class="actions">
+                            <a href="{{ url_for('notes', topic_key=details['topic_key']) }}?domain={{ selected_domain }}&topic_index={{ topic_index }}">📄</a>
+                        </td>
+                        <td class="actions">
+                            <a href="{{ url_for('videos', topic_key=details['topic_key']) }}">▶️</a>
+                        </td>
+                        <td class="actions">
+                            <a href="{{ url_for('quiz', topic_key=details['topic_key']) }}?domain={{ selected_domain }}&topic_index={{ topic_index }}">📝</a>
+                        </td>
+                        <td class="progress">
+                            {% if completed.get(details['topic_key']) %}
+                                <span class="done">✓ Done</span>
+                            {% else %}
+                                <span class="pending">— Pending</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+<script>
+function toggleSection(id) {
+    let section = document.getElementById("section-" + id);
+    if (section) {
+        section.style.display = (section.style.display === "block") ? "none" : "block";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const params = new URLSearchParams(window.location.search);
+    let topicIndex = params.get("topic_index") || 1;
+    toggleSection(topicIndex);
+    document.getElementById("topic-" + topicIndex)?.scrollIntoView({ behavior: "smooth" });
+});
+</script>
+
+</body>
+</html>

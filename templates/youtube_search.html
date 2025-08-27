@@ -1,0 +1,29 @@
+<!-- youtube_search.html -->
+{% extends "base.html" %}
+{% block content %}
+<h2>YouTube Search</h2>
+<form method="post">
+  <input name="query" value="{{ query }}" placeholder="Search for lecture or topic" required>
+  <button type="submit">Search</button>
+</form>
+
+{% if error %}
+  <p style="color:red">{{ error }}</p>
+{% endif %}
+
+{% if results %}
+  <ul>
+  {% for r in results %}
+    <li>
+      <img src="{{ r.thumbnail }}" alt="" />
+      <strong>{{ r.title }}</strong><br/>
+      <form method="post" action="{{ url_for('add_video_by_url') }}">
+        <input type="hidden" name="video_url" value="https://www.youtube.com/watch?v={{ r.videoId }}">
+        <input type="hidden" name="topic_key" value="General">
+        <button type="submit">Add this video</button>
+      </form>
+    </li>
+  {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}
